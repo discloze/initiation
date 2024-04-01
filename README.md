@@ -2,7 +2,7 @@
 
 ## Overview
 
-- **Objective**: Fork the provided repository and execute the project requirements through a pull request.
+- **Objective**: Fork this repo and execute the project requirements through a pull request.
 - **Development Framework**: Employ function components for application development.
   - Utilize **Vite** (https://vitejs.dev/) integrated with **React** and **TypeScript** for efficient project setup and development.
   - Incorporate **Mantine** (https://mantine.dev/) for implementing UI components.
