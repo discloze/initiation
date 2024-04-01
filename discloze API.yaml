@@ -1,0 +1,5830 @@
+openapi: 3.0.3
+info:
+  title: discloze API
+  version: 1.0.0
+  description: Documentation of API endpoints of discloze
+paths:
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - knoxTokenAuth: []
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /attachment/:
+    get:
+      operationId: attachment_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - attachment
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAttachmentList'
+          description: ''
+    post:
+      operationId: attachment_create
+      tags:
+      - attachment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: ''
+  /attachment/{id}/:
+    get:
+      operationId: attachment_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attachment.
+        required: true
+      tags:
+      - attachment
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: ''
+    put:
+      operationId: attachment_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attachment.
+        required: true
+      tags:
+      - attachment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: ''
+    patch:
+      operationId: attachment_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attachment.
+        required: true
+      tags:
+      - attachment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAttachment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAttachment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAttachment'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: ''
+    delete:
+      operationId: attachment_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attachment.
+        required: true
+      tags:
+      - attachment
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /attachment/presigned_url/:
+    post:
+      operationId: attachment_presigned_url_create
+      tags:
+      - attachment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetPreSignedUrl'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetPreSignedUrl'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GetPreSignedUrl'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreSignedResponse'
+          description: ''
+  /auth/login/:
+    post:
+      operationId: auth_login_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Auth'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Auth'
+        required: true
+      security:
+      - basicAuth: []
+      - cookieAuth: []
+      - knoxTokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auth'
+          description: ''
+  /auth/logout/:
+    post:
+      operationId: auth_logout_create
+      tags:
+      - auth
+      responses:
+        '200':
+          description: No response body
+  /auth/logoutall/:
+    post:
+      operationId: auth_logoutall_create
+      description: |-
+        Log the user out of all sessions
+        I.E. deletes all auth tokens for the user
+      tags:
+      - auth
+      security:
+      - knoxTokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /client/:
+    get:
+      operationId: client_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - client
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: client_create
+      tags:
+      - client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /client/{id}/:
+    get:
+      operationId: client_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this company.
+        required: true
+      tags:
+      - client
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: client_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this company.
+        required: true
+      tags:
+      - client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: client_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this company.
+        required: true
+      tags:
+      - client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: client_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this company.
+        required: true
+      tags:
+      - client
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /comment/:
+    get:
+      operationId: comment_list
+      parameters:
+      - in: query
+        name: ordering
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: risk
+        schema:
+          type: string
+      tags:
+      - comment
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCommentList'
+          description: ''
+    post:
+      operationId: comment_create
+      parameters:
+      - in: query
+        name: ordering
+        schema:
+          type: string
+      - in: query
+        name: risk
+        schema:
+          type: string
+      tags:
+      - comment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Comment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Comment'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+          description: ''
+  /comment/{id}/:
+    get:
+      operationId: comment_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this comment.
+        required: true
+      - in: query
+        name: ordering
+        schema:
+          type: string
+      - in: query
+        name: risk
+        schema:
+          type: string
+      tags:
+      - comment
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+          description: ''
+    put:
+      operationId: comment_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this comment.
+        required: true
+      - in: query
+        name: ordering
+        schema:
+          type: string
+      - in: query
+        name: risk
+        schema:
+          type: string
+      tags:
+      - comment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Comment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Comment'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+          description: ''
+    patch:
+      operationId: comment_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this comment.
+        required: true
+      - in: query
+        name: ordering
+        schema:
+          type: string
+      - in: query
+        name: risk
+        schema:
+          type: string
+      tags:
+      - comment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedComment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedComment'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+          description: ''
+    delete:
+      operationId: comment_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this comment.
+        required: true
+      - in: query
+        name: ordering
+        schema:
+          type: string
+      - in: query
+        name: risk
+        schema:
+          type: string
+      tags:
+      - comment
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /company/:
+    get:
+      operationId: company_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - company
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCompanyList'
+          description: ''
+    post:
+      operationId: company_create
+      tags:
+      - company
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Company'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Company'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+  /company/{id}/:
+    get:
+      operationId: company_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this company.
+        required: true
+      tags:
+      - company
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+    put:
+      operationId: company_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this company.
+        required: true
+      tags:
+      - company
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Company'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Company'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+    patch:
+      operationId: company_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this company.
+        required: true
+      tags:
+      - company
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCompany'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCompany'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCompany'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+    delete:
+      operationId: company_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this company.
+        required: true
+      tags:
+      - company
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /company/{id}/pending_invitations/:
+    get:
+      operationId: company_pending_invitations_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this company.
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - company
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedInvitationList'
+          description: ''
+  /company/{id}/tags/:
+    get:
+      operationId: company_tags_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this company.
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - company
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTagList'
+          description: ''
+  /company/user/add/:
+    post:
+      operationId: company_user_add_create
+      tags:
+      - company
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CompanyUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CompanyUser'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+  /company/user/remove/:
+    post:
+      operationId: company_user_remove_create
+      tags:
+      - company
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CompanyUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CompanyUser'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+  /contract/:
+    get:
+      operationId: contract_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - contract
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedContractList'
+          description: ''
+    post:
+      operationId: contract_create
+      parameters:
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - contract
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contract'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Contract'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Contract'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+          description: ''
+  /contract/{id}/:
+    get:
+      operationId: contract_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this contract.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - contract
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+          description: ''
+    put:
+      operationId: contract_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this contract.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - contract
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contract'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Contract'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Contract'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+          description: ''
+    patch:
+      operationId: contract_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this contract.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - contract
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedContract'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedContract'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedContract'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contract'
+          description: ''
+    delete:
+      operationId: contract_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this contract.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - contract
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /conversation/:
+    get:
+      operationId: conversation_list
+      parameters:
+      - in: query
+        name: contract
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - conversation
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConversationList'
+          description: ''
+    post:
+      operationId: conversation_create
+      parameters:
+      - in: query
+        name: contract
+        schema:
+          type: string
+      tags:
+      - conversation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Conversation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Conversation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Conversation'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+          description: ''
+  /conversation/{id}/:
+    get:
+      operationId: conversation_retrieve
+      parameters:
+      - in: query
+        name: contract
+        schema:
+          type: string
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this conversation.
+        required: true
+      tags:
+      - conversation
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+          description: ''
+    put:
+      operationId: conversation_update
+      parameters:
+      - in: query
+        name: contract
+        schema:
+          type: string
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this conversation.
+        required: true
+      tags:
+      - conversation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Conversation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Conversation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Conversation'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+          description: ''
+    patch:
+      operationId: conversation_partial_update
+      parameters:
+      - in: query
+        name: contract
+        schema:
+          type: string
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this conversation.
+        required: true
+      tags:
+      - conversation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedConversation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedConversation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedConversation'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+          description: ''
+    delete:
+      operationId: conversation_destroy
+      parameters:
+      - in: query
+        name: contract
+        schema:
+          type: string
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this conversation.
+        required: true
+      tags:
+      - conversation
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /email_template/:
+    get:
+      operationId: email_template_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - email_template
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEmailTemplateList'
+          description: ''
+    post:
+      operationId: email_template_create
+      tags:
+      - email_template
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailTemplate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmailTemplate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmailTemplate'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailTemplate'
+          description: ''
+  /email_template/{id}/:
+    get:
+      operationId: email_template_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this email template.
+        required: true
+      tags:
+      - email_template
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailTemplate'
+          description: ''
+    put:
+      operationId: email_template_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this email template.
+        required: true
+      tags:
+      - email_template
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailTemplate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmailTemplate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmailTemplate'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailTemplate'
+          description: ''
+    patch:
+      operationId: email_template_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this email template.
+        required: true
+      tags:
+      - email_template
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEmailTemplate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEmailTemplate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEmailTemplate'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailTemplate'
+          description: ''
+    delete:
+      operationId: email_template_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this email template.
+        required: true
+      tags:
+      - email_template
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /invitation/:
+    post:
+      operationId: invitation_create
+      tags:
+      - invitation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invitation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Invitation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Invitation'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitation'
+          description: ''
+  /invitation/{id}/cancel/:
+    get:
+      operationId: invitation_cancel_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this invitation.
+        required: true
+      tags:
+      - invitation
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitation'
+          description: ''
+  /invitation/{id}/resend/:
+    get:
+      operationId: invitation_resend_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this invitation.
+        required: true
+      tags:
+      - invitation
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitation'
+          description: ''
+  /invitation/accept_existing_user/:
+    post:
+      operationId: invitation_accept_existing_user_create
+      tags:
+      - invitation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvitationAcceptExistingUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InvitationAcceptExistingUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/InvitationAcceptExistingUser'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+  /invitation/accept_new_user/:
+    post:
+      operationId: invitation_accept_new_user_create
+      tags:
+      - invitation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvitationAcceptNewUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InvitationAcceptNewUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/InvitationAcceptNewUser'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+  /invitation/validate/:
+    post:
+      operationId: invitation_validate_create
+      tags:
+      - invitation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvitationValidate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InvitationValidate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/InvitationValidate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitationValidateResponse'
+          description: ''
+  /message/:
+    get:
+      operationId: message_list
+      parameters:
+      - in: query
+        name: conversation
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: read
+        schema:
+          type: boolean
+      tags:
+      - message
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMessageList'
+          description: ''
+    post:
+      operationId: message_create
+      tags:
+      - message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Message'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Message'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: ''
+  /message/{id}/:
+    get:
+      operationId: message_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this message.
+        required: true
+      tags:
+      - message
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: ''
+    put:
+      operationId: message_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this message.
+        required: true
+      tags:
+      - message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Message'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Message'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: ''
+    patch:
+      operationId: message_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this message.
+        required: true
+      tags:
+      - message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMessage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMessage'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMessage'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: ''
+    delete:
+      operationId: message_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this message.
+        required: true
+      tags:
+      - message
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /password_reset/:
+    post:
+      operationId: password_reset_create
+      description: |-
+        An Api View which provides a method to request a password reset token based on an e-mail address
+
+        Sends a signal reset_password_token_created when a reset token was created
+      tags:
+      - password_reset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Email'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Email'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Email'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Email'
+          description: ''
+  /password_reset/confirm/:
+    post:
+      operationId: password_reset_confirm_create
+      description: An Api View which provides a method to reset a password based on
+        a unique token
+      tags:
+      - password_reset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordToken'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordToken'
+          description: ''
+  /password_reset/validate_token/:
+    post:
+      operationId: password_reset_validate_token_create
+      description: An Api View which provides a method to verify that a token is valid
+      tags:
+      - password_reset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResetToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResetToken'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetToken'
+          description: ''
+  /project/:
+    get:
+      operationId: project_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - project
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectList'
+          description: ''
+    post:
+      operationId: project_create
+      tags:
+      - project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Project'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Project'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+  /project/{id}/:
+    get:
+      operationId: project_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this project.
+        required: true
+      tags:
+      - project
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+    put:
+      operationId: project_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this project.
+        required: true
+      tags:
+      - project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Project'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Project'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+    patch:
+      operationId: project_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this project.
+        required: true
+      tags:
+      - project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProject'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProject'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProject'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+    delete:
+      operationId: project_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this project.
+        required: true
+      tags:
+      - project
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /project/{id}/details/:
+    get:
+      operationId: project_details_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this project.
+        required: true
+      tags:
+      - project
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDetails'
+          description: ''
+  /proposal/:
+    get:
+      operationId: proposal_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - proposal
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProposalList'
+          description: ''
+    post:
+      operationId: proposal_create
+      parameters:
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - proposal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Proposal'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Proposal'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Proposal'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Proposal'
+          description: ''
+  /proposal/{id}/:
+    get:
+      operationId: proposal_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this proposal.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - proposal
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Proposal'
+          description: ''
+    put:
+      operationId: proposal_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this proposal.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - proposal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Proposal'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Proposal'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Proposal'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Proposal'
+          description: ''
+    patch:
+      operationId: proposal_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this proposal.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - proposal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProposal'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProposal'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProposal'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Proposal'
+          description: ''
+    delete:
+      operationId: proposal_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this proposal.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - proposal
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /researcher/:
+    get:
+      operationId: researcher_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - researcher
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: researcher_create
+      tags:
+      - researcher
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /researcher/{id}/:
+    get:
+      operationId: researcher_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this researcher.
+        required: true
+      tags:
+      - researcher
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: researcher_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this researcher.
+        required: true
+      tags:
+      - researcher
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: researcher_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this researcher.
+        required: true
+      tags:
+      - researcher
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: researcher_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this researcher.
+        required: true
+      tags:
+      - researcher
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /risk/:
+    get:
+      operationId: risk_list
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - broken_access_control
+            - cryptographic_failure
+            - data_integrity_failure
+            - identification_and_auth_failure
+            - injection
+            - insecure_design
+            - secure_logging_failure
+            - security_misconfiguration
+            - server_side_request_forgery
+            - vulnerable_and_outdated_components
+        description: |-
+          * `broken_access_control` - Broken Access Control
+          * `cryptographic_failure` - Cryptographic Failure
+          * `injection` - Injection
+          * `insecure_design` - Insecure Design
+          * `security_misconfiguration` - Security Misconfiguration
+          * `vulnerable_and_outdated_components` - Vulnerable and Outdated Components
+          * `identification_and_auth_failure` - Identification and Auth Failure
+          * `data_integrity_failure` - Data Integrity Failure
+          * `secure_logging_failure` - Secure Logging Failure
+          * `server_side_request_forgery` - Server Side Request Forgery
+        explode: true
+        style: form
+      - in: query
+        name: created_after
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: created_before
+        schema:
+          type: string
+          format: date
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: project
+        schema:
+          type: string
+      - in: query
+        name: severity
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - critical
+            - high
+            - informational
+            - low
+            - medium
+        description: |-
+          * `informational` - Informational
+          * `low` - Low
+          * `medium` - Medium
+          * `high` - High
+          * `critical` - Critical
+        explode: true
+        style: form
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - closed
+          - in_progress
+          - new
+          - rejected
+        description: |-
+          * `new` - New
+          * `in_progress` - In Progress
+          * `closed` - Closed
+          * `rejected` - Rejected
+      - in: query
+        name: tag
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        explode: true
+        style: form
+      - in: query
+        name: updated_after
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: updated_before
+        schema:
+          type: string
+          format: date
+      tags:
+      - risk
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRiskList'
+          description: ''
+    post:
+      operationId: risk_create
+      parameters:
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - risk
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Risk'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Risk'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Risk'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Risk'
+          description: ''
+  /risk/{id}/:
+    get:
+      operationId: risk_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this risk.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - risk
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Risk'
+          description: ''
+    put:
+      operationId: risk_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this risk.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - risk
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Risk'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Risk'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Risk'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Risk'
+          description: ''
+    patch:
+      operationId: risk_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this risk.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - risk
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRisk'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRisk'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRisk'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Risk'
+          description: ''
+    delete:
+      operationId: risk_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this risk.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - risk
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /risk/{id}/ask_to_unlock/:
+    get:
+      operationId: risk_ask_to_unlock_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this risk.
+        required: true
+      - in: query
+        name: project
+        schema:
+          type: string
+      tags:
+      - risk
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /risk/{id}/comments/:
+    get:
+      operationId: risk_comments_list
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - broken_access_control
+            - cryptographic_failure
+            - data_integrity_failure
+            - identification_and_auth_failure
+            - injection
+            - insecure_design
+            - secure_logging_failure
+            - security_misconfiguration
+            - server_side_request_forgery
+            - vulnerable_and_outdated_components
+        description: |-
+          * `broken_access_control` - Broken Access Control
+          * `cryptographic_failure` - Cryptographic Failure
+          * `injection` - Injection
+          * `insecure_design` - Insecure Design
+          * `security_misconfiguration` - Security Misconfiguration
+          * `vulnerable_and_outdated_components` - Vulnerable and Outdated Components
+          * `identification_and_auth_failure` - Identification and Auth Failure
+          * `data_integrity_failure` - Data Integrity Failure
+          * `secure_logging_failure` - Secure Logging Failure
+          * `server_side_request_forgery` - Server Side Request Forgery
+        explode: true
+        style: form
+      - in: query
+        name: created_after
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: created_before
+        schema:
+          type: string
+          format: date
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this risk.
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: project
+        schema:
+          type: string
+      - in: query
+        name: severity
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - critical
+            - high
+            - informational
+            - low
+            - medium
+        description: |-
+          * `informational` - Informational
+          * `low` - Low
+          * `medium` - Medium
+          * `high` - High
+          * `critical` - Critical
+        explode: true
+        style: form
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - closed
+          - in_progress
+          - new
+          - rejected
+        description: |-
+          * `new` - New
+          * `in_progress` - In Progress
+          * `closed` - Closed
+          * `rejected` - Rejected
+      - in: query
+        name: tag
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        explode: true
+        style: form
+      - in: query
+        name: updated_after
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: updated_before
+        schema:
+          type: string
+          format: date
+      tags:
+      - risk
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCommentList'
+          description: ''
+  /risk/{id}/history/:
+    get:
+      operationId: risk_history_list
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - broken_access_control
+            - cryptographic_failure
+            - data_integrity_failure
+            - identification_and_auth_failure
+            - injection
+            - insecure_design
+            - secure_logging_failure
+            - security_misconfiguration
+            - server_side_request_forgery
+            - vulnerable_and_outdated_components
+        description: |-
+          * `broken_access_control` - Broken Access Control
+          * `cryptographic_failure` - Cryptographic Failure
+          * `injection` - Injection
+          * `insecure_design` - Insecure Design
+          * `security_misconfiguration` - Security Misconfiguration
+          * `vulnerable_and_outdated_components` - Vulnerable and Outdated Components
+          * `identification_and_auth_failure` - Identification and Auth Failure
+          * `data_integrity_failure` - Data Integrity Failure
+          * `secure_logging_failure` - Secure Logging Failure
+          * `server_side_request_forgery` - Server Side Request Forgery
+        explode: true
+        style: form
+      - in: query
+        name: created_after
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: created_before
+        schema:
+          type: string
+          format: date
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this risk.
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: project
+        schema:
+          type: string
+      - in: query
+        name: severity
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - critical
+            - high
+            - informational
+            - low
+            - medium
+        description: |-
+          * `informational` - Informational
+          * `low` - Low
+          * `medium` - Medium
+          * `high` - High
+          * `critical` - Critical
+        explode: true
+        style: form
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - closed
+          - in_progress
+          - new
+          - rejected
+        description: |-
+          * `new` - New
+          * `in_progress` - In Progress
+          * `closed` - Closed
+          * `rejected` - Rejected
+      - in: query
+        name: tag
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        explode: true
+        style: form
+      - in: query
+        name: updated_after
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: updated_before
+        schema:
+          type: string
+          format: date
+      tags:
+      - risk
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRiskHistoryList'
+          description: ''
+  /risk_tag/:
+    get:
+      operationId: risk_tag_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: risk
+        schema:
+          type: string
+      - in: query
+        name: tag
+        schema:
+          type: string
+      - in: query
+        name: tag_name
+        schema:
+          type: string
+      tags:
+      - risk_tag
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRiskTagList'
+          description: ''
+    post:
+      operationId: risk_tag_create
+      tags:
+      - risk_tag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RiskTag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RiskTag'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RiskTag'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskTag'
+          description: ''
+  /risk_tag/{id}/:
+    get:
+      operationId: risk_tag_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this risk tag.
+        required: true
+      tags:
+      - risk_tag
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskTag'
+          description: ''
+    put:
+      operationId: risk_tag_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this risk tag.
+        required: true
+      tags:
+      - risk_tag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RiskTag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RiskTag'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RiskTag'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskTag'
+          description: ''
+    patch:
+      operationId: risk_tag_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this risk tag.
+        required: true
+      tags:
+      - risk_tag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRiskTag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRiskTag'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRiskTag'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskTag'
+          description: ''
+    delete:
+      operationId: risk_tag_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this risk tag.
+        required: true
+      tags:
+      - risk_tag
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /skill/:
+    get:
+      operationId: skill_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - skill
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSkillList'
+          description: ''
+    post:
+      operationId: skill_create
+      tags:
+      - skill
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Skill'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Skill'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Skill'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+          description: ''
+  /skill/{id}/:
+    get:
+      operationId: skill_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this skill.
+        required: true
+      tags:
+      - skill
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+          description: ''
+    put:
+      operationId: skill_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this skill.
+        required: true
+      tags:
+      - skill
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Skill'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Skill'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Skill'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+          description: ''
+    patch:
+      operationId: skill_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this skill.
+        required: true
+      tags:
+      - skill
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSkill'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSkill'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSkill'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+          description: ''
+    delete:
+      operationId: skill_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this skill.
+        required: true
+      tags:
+      - skill
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /tag/:
+    get:
+      operationId: tag_list
+      parameters:
+      - in: query
+        name: company
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - tag
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTagList'
+          description: ''
+    post:
+      operationId: tag_create
+      tags:
+      - tag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TagDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TagDetail'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDetail'
+          description: ''
+  /tag/{id}/:
+    get:
+      operationId: tag_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this tag.
+        required: true
+      tags:
+      - tag
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: ''
+    put:
+      operationId: tag_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this tag.
+        required: true
+      tags:
+      - tag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tag'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Tag'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: ''
+    patch:
+      operationId: tag_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this tag.
+        required: true
+      tags:
+      - tag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTag'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTag'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: ''
+    delete:
+      operationId: tag_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this tag.
+        required: true
+      tags:
+      - tag
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /unlock_request/:
+    get:
+      operationId: unlock_request_list
+      parameters:
+      - in: query
+        name: approved
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: risk
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - unlock_request
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUnlockRequestList'
+          description: ''
+    post:
+      operationId: unlock_request_create
+      tags:
+      - unlock_request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnlockRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UnlockRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UnlockRequest'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnlockRequest'
+          description: ''
+  /unlock_request/{id}/:
+    get:
+      operationId: unlock_request_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this unlock request.
+        required: true
+      tags:
+      - unlock_request
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnlockRequest'
+          description: ''
+    put:
+      operationId: unlock_request_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this unlock request.
+        required: true
+      tags:
+      - unlock_request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnlockRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UnlockRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UnlockRequest'
+        required: true
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnlockRequest'
+          description: ''
+    patch:
+      operationId: unlock_request_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this unlock request.
+        required: true
+      tags:
+      - unlock_request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUnlockRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUnlockRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUnlockRequest'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnlockRequest'
+          description: ''
+    delete:
+      operationId: unlock_request_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this unlock request.
+        required: true
+      tags:
+      - unlock_request
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /user/:
+    get:
+      operationId: user_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: user_type
+        schema:
+          type: string
+          nullable: true
+          enum:
+          - client
+          - partner
+          - researcher
+        description: |-
+          * `client` - client
+          * `researcher` - researcher
+          * `partner` - partner
+      tags:
+      - user
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: user_create
+      tags:
+      - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /user/{id}/:
+    get:
+      operationId: user_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - user
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: user_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: user_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: user_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - user
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /user/me/:
+    get:
+      operationId: user_me_retrieve
+      tags:
+      - user
+      security:
+      - knoxTokenAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+components:
+  schemas:
+    Attachment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        url:
+          type: string
+          readOnly: true
+        key:
+          type: string
+          maxLength: 255
+        filename:
+          type: string
+          nullable: true
+          maxLength: 255
+        content_type:
+          type: string
+          nullable: true
+          maxLength: 255
+        size:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+        deleted:
+          type: boolean
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        author:
+          type: string
+          format: uuid
+          readOnly: true
+      required:
+      - author
+      - created
+      - deleted
+      - id
+      - key
+      - updated
+      - url
+    Auth:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+          title: Username
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - email
+      - password
+      - token
+    BlankEnum:
+      enum:
+      - ''
+    CategoryEnum:
+      enum:
+      - broken_access_control
+      - cryptographic_failure
+      - injection
+      - insecure_design
+      - security_misconfiguration
+      - vulnerable_and_outdated_components
+      - identification_and_auth_failure
+      - data_integrity_failure
+      - secure_logging_failure
+      - server_side_request_forgery
+      type: string
+      description: |-
+        * `broken_access_control` - Broken Access Control
+        * `cryptographic_failure` - Cryptographic Failure
+        * `injection` - Injection
+        * `insecure_design` - Insecure Design
+        * `security_misconfiguration` - Security Misconfiguration
+        * `vulnerable_and_outdated_components` - Vulnerable and Outdated Components
+        * `identification_and_auth_failure` - Identification and Auth Failure
+        * `data_integrity_failure` - Data Integrity Failure
+        * `secure_logging_failure` - Secure Logging Failure
+        * `server_side_request_forgery` - Server Side Request Forgery
+    Changes:
+      type: object
+      properties:
+        field:
+          type: string
+        old_value:
+          type: string
+        new_value:
+          type: string
+      required:
+      - field
+      - new_value
+      - old_value
+    Comment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/UserSummary'
+          readOnly: true
+        content:
+          type: string
+        deleted:
+          type: boolean
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        risk:
+          type: string
+          format: uuid
+        attachments:
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+      - author
+      - content
+      - created
+      - deleted
+      - id
+      - risk
+      - updated
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          readOnly: true
+      required:
+      - created
+      - id
+      - name
+      - updated
+      - users
+    CompanySummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created
+      - id
+      - name
+      - updated
+    CompanyUser:
+      type: object
+      properties:
+        user:
+          type: string
+      required:
+      - user
+    Contract:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        project:
+          allOf:
+          - $ref: '#/components/schemas/ProjectSummary'
+          readOnly: true
+        researcher:
+          allOf:
+          - $ref: '#/components/schemas/Researcher'
+          readOnly: true
+        conversation:
+          allOf:
+          - $ref: '#/components/schemas/Conversation'
+          readOnly: true
+        active:
+          type: boolean
+        payment_option:
+          $ref: '#/components/schemas/PaymentOptionEnum'
+        rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - conversation
+      - created
+      - id
+      - project
+      - researcher
+      - updated
+    Conversation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        unread_messages:
+          type: integer
+          readOnly: true
+        conversation_type:
+          $ref: '#/components/schemas/ConversationTypeEnum'
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        contract:
+          type: string
+          format: uuid
+          nullable: true
+        risk:
+          type: string
+          format: uuid
+          nullable: true
+        users:
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+      - created
+      - id
+      - unread_messages
+      - updated
+      - users
+    ConversationTypeEnum:
+      enum:
+      - dm
+      - contract
+      - risk
+      type: string
+      description: |-
+        * `dm` - DM
+        * `contract` - Contract
+        * `risk` - Risk
+    Email:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    EmailTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        subject:
+          type: string
+          maxLength: 255
+        message:
+          type: string
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created
+      - id
+      - message
+      - name
+      - updated
+    EnvironmentEnum:
+      enum:
+      - web
+      - mobile
+      - api
+      - network
+      type: string
+      description: |-
+        * `web` - Web
+        * `mobile` - Mobile
+        * `api` - API
+        * `network` - Network
+    GetPreSignedUrl:
+      type: object
+      properties:
+        key:
+          type: string
+        content_type:
+          type: string
+      required:
+      - content_type
+      - key
+    Invitation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        code:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        company:
+          type: string
+          format: uuid
+      required:
+      - code
+      - company
+      - created
+      - email
+      - id
+      - updated
+    InvitationAcceptExistingUser:
+      type: object
+      properties:
+        code:
+          type: string
+      required:
+      - code
+    InvitationAcceptNewUser:
+      type: object
+      properties:
+        code:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        password_confirmation:
+          type: string
+        name:
+          type: string
+      required:
+      - code
+      - email
+      - name
+      - password
+      - password_confirmation
+    InvitationValidate:
+      type: object
+      properties:
+        code:
+          type: string
+      required:
+      - code
+    InvitationValidateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        company:
+          $ref: '#/components/schemas/Company'
+        existing_user:
+          type: boolean
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        code:
+          type: string
+          format: uuid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - code
+      - company
+      - created
+      - email
+      - existing_user
+      - id
+      - updated
+    KeyValuePair:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: integer
+      required:
+      - key
+      - value
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/UserSummary'
+          readOnly: true
+        content:
+          type: string
+        read:
+          type: boolean
+        deleted:
+          type: boolean
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        conversation:
+          type: string
+          format: uuid
+        attachment:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - author
+      - content
+      - conversation
+      - created
+      - deleted
+      - id
+      - updated
+    NameEnum:
+      enum:
+      - mobile
+      - web
+      - api
+      - iot
+      - network
+      - other
+      type: string
+      description: |-
+        * `mobile` - Mobile
+        * `web` - Web
+        * `api` - API
+        * `iot` - IoT
+        * `network` - Network
+        * `other` - Other
+    NullEnum:
+      enum:
+      - null
+    PaginatedAttachmentList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+    PaginatedCommentList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+    PaginatedCompanyList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Company'
+    PaginatedContractList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contract'
+    PaginatedConversationList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Conversation'
+    PaginatedEmailTemplateList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailTemplate'
+    PaginatedInvitationList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Invitation'
+    PaginatedMessageList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+    PaginatedProjectList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+    PaginatedProposalList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Proposal'
+    PaginatedRiskHistoryList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiskHistory'
+    PaginatedRiskList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Risk'
+    PaginatedRiskTagList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiskTag'
+    PaginatedSkillList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Skill'
+    PaginatedTagList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+    PaginatedUnlockRequestList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UnlockRequest'
+    PaginatedUserList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PasswordToken:
+      type: object
+      properties:
+        password:
+          type: string
+        token:
+          type: string
+      required:
+      - password
+      - token
+    PatchedAttachment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        url:
+          type: string
+          readOnly: true
+        key:
+          type: string
+          maxLength: 255
+        filename:
+          type: string
+          nullable: true
+          maxLength: 255
+        content_type:
+          type: string
+          nullable: true
+          maxLength: 255
+        size:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+        deleted:
+          type: boolean
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        author:
+          type: string
+          format: uuid
+          readOnly: true
+    PatchedComment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/UserSummary'
+          readOnly: true
+        content:
+          type: string
+        deleted:
+          type: boolean
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        risk:
+          type: string
+          format: uuid
+        attachments:
+          type: array
+          items:
+            type: string
+            format: uuid
+    PatchedCompany:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          readOnly: true
+    PatchedContract:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        project:
+          allOf:
+          - $ref: '#/components/schemas/ProjectSummary'
+          readOnly: true
+        researcher:
+          allOf:
+          - $ref: '#/components/schemas/Researcher'
+          readOnly: true
+        conversation:
+          allOf:
+          - $ref: '#/components/schemas/Conversation'
+          readOnly: true
+        active:
+          type: boolean
+        payment_option:
+          $ref: '#/components/schemas/PaymentOptionEnum'
+        rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedConversation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        unread_messages:
+          type: integer
+          readOnly: true
+        conversation_type:
+          $ref: '#/components/schemas/ConversationTypeEnum'
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        contract:
+          type: string
+          format: uuid
+          nullable: true
+        risk:
+          type: string
+          format: uuid
+          nullable: true
+        users:
+          type: array
+          items:
+            type: string
+            format: uuid
+    PatchedEmailTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        subject:
+          type: string
+          maxLength: 255
+        message:
+          type: string
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedMessage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/UserSummary'
+          readOnly: true
+        content:
+          type: string
+        read:
+          type: boolean
+        deleted:
+          type: boolean
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        conversation:
+          type: string
+          format: uuid
+        attachment:
+          type: string
+          format: uuid
+          nullable: true
+    PatchedProject:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        company:
+          allOf:
+          - $ref: '#/components/schemas/CompanySummary'
+          readOnly: true
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkillSummary'
+          readOnly: true
+        stats:
+          allOf:
+          - $ref: '#/components/schemas/ProjectStats'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status045Enum'
+        payment_option:
+          $ref: '#/components/schemas/PaymentOptionEnum'
+        budget:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedProposal:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        project:
+          allOf:
+          - $ref: '#/components/schemas/ProjectSummary'
+          readOnly: true
+        researcher:
+          allOf:
+          - $ref: '#/components/schemas/Researcher'
+          readOnly: true
+        conversation:
+          allOf:
+          - $ref: '#/components/schemas/Conversation'
+          readOnly: true
+        active:
+          type: boolean
+        payment_option:
+          $ref: '#/components/schemas/PaymentOptionEnum'
+        status:
+          $ref: '#/components/schemas/ProposalStatusEnum'
+        rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedRisk:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        researcher:
+          allOf:
+          - $ref: '#/components/schemas/Researcher'
+          readOnly: true
+        locked:
+          type: boolean
+          readOnly: true
+        comment_count:
+          type: integer
+          readOnly: true
+        pending_unlock:
+          type: integer
+          readOnly: true
+        sla:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        severity:
+          $ref: '#/components/schemas/SeverityEnum'
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        status:
+          $ref: '#/components/schemas/RiskStatusEnum'
+        environment:
+          $ref: '#/components/schemas/EnvironmentEnum'
+        index:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        closed:
+          type: string
+          format: date-time
+          nullable: true
+        project:
+          type: string
+          format: uuid
+        contract:
+          type: string
+          format: uuid
+        assignee:
+          type: string
+          format: uuid
+          nullable: true
+        attachments:
+          type: array
+          items:
+            type: string
+            format: uuid
+    PatchedRiskTag:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        tag_details:
+          allOf:
+          - $ref: '#/components/schemas/Tag'
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        risk:
+          type: string
+          format: uuid
+        tag:
+          type: string
+          format: uuid
+    PatchedSkill:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/NameEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedTag:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        company:
+          allOf:
+          - $ref: '#/components/schemas/Company'
+          readOnly: true
+        tag:
+          type: string
+          maxLength: 255
+        color:
+          type: string
+          maxLength: 255
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedUnlockRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        risk:
+          type: string
+          format: uuid
+        approved:
+          type: boolean
+          default: false
+        risk_details:
+          allOf:
+          - $ref: '#/components/schemas/Risk'
+          readOnly: true
+    PatchedUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          title: Name of User
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        user_type:
+          readOnly: true
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/UserTypeEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        email_sha256:
+          type: string
+          readOnly: true
+        is_active:
+          type: boolean
+          readOnly: true
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+    PaymentOptionEnum:
+      enum:
+      - hourly
+      - fixed
+      type: string
+      description: |-
+        * `hourly` - Hourly
+        * `fixed` - Fixed
+    PreSignedFields:
+      type: object
+      properties:
+        key:
+          type: string
+        AWSAccessKeyId:
+          type: string
+        policy:
+          type: string
+        signature:
+          type: string
+      required:
+      - AWSAccessKeyId
+      - key
+      - policy
+      - signature
+    PreSignedResponse:
+      type: object
+      properties:
+        url:
+          type: string
+        fields:
+          $ref: '#/components/schemas/PreSignedFields'
+      required:
+      - fields
+      - url
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        company:
+          allOf:
+          - $ref: '#/components/schemas/CompanySummary'
+          readOnly: true
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkillSummary'
+          readOnly: true
+        stats:
+          allOf:
+          - $ref: '#/components/schemas/ProjectStats'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status045Enum'
+        payment_option:
+          $ref: '#/components/schemas/PaymentOptionEnum'
+        budget:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - company
+      - created
+      - description
+      - id
+      - name
+      - skills
+      - stats
+      - status
+      - updated
+    ProjectDetails:
+      type: object
+      properties:
+        risks:
+          type: integer
+        contracts:
+          type: integer
+        severities:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValuePair'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValuePair'
+        statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValuePair'
+        environments:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValuePair'
+        team:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserSummary'
+          readOnly: true
+        researchers:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserSummary'
+          readOnly: true
+      required:
+      - categories
+      - contracts
+      - environments
+      - researchers
+      - risks
+      - severities
+      - statuses
+      - team
+    ProjectStats:
+      type: object
+      properties:
+        proposals:
+          type: integer
+          readOnly: true
+        contracts:
+          type: integer
+          readOnly: true
+        unread_messages:
+          type: integer
+          readOnly: true
+      required:
+      - contracts
+      - proposals
+      - unread_messages
+    ProjectSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        company:
+          allOf:
+          - $ref: '#/components/schemas/CompanySummary'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status045Enum'
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkillSummary'
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        stats:
+          allOf:
+          - $ref: '#/components/schemas/ProjectStats'
+          readOnly: true
+      required:
+      - company
+      - created
+      - description
+      - id
+      - name
+      - skills
+      - stats
+      - status
+      - updated
+    Proposal:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        project:
+          allOf:
+          - $ref: '#/components/schemas/ProjectSummary'
+          readOnly: true
+        researcher:
+          allOf:
+          - $ref: '#/components/schemas/Researcher'
+          readOnly: true
+        conversation:
+          allOf:
+          - $ref: '#/components/schemas/Conversation'
+          readOnly: true
+        active:
+          type: boolean
+        payment_option:
+          $ref: '#/components/schemas/PaymentOptionEnum'
+        status:
+          $ref: '#/components/schemas/ProposalStatusEnum'
+        rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - conversation
+      - created
+      - id
+      - project
+      - researcher
+      - updated
+    ProposalStatusEnum:
+      enum:
+      - accepted
+      - rejected
+      - pending
+      type: string
+      description: |-
+        * `accepted` - Accepted
+        * `rejected` - Rejected
+        * `pending` - Pending
+    Researcher:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          title: Name of User
+          maxLength: 255
+        email_sha256:
+          type: string
+          readOnly: true
+      required:
+      - email_sha256
+      - id
+    ResetToken:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+      - token
+    Risk:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        researcher:
+          allOf:
+          - $ref: '#/components/schemas/Researcher'
+          readOnly: true
+        locked:
+          type: boolean
+          readOnly: true
+        comment_count:
+          type: integer
+          readOnly: true
+        pending_unlock:
+          type: integer
+          readOnly: true
+        sla:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        severity:
+          $ref: '#/components/schemas/SeverityEnum'
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        status:
+          $ref: '#/components/schemas/RiskStatusEnum'
+        environment:
+          $ref: '#/components/schemas/EnvironmentEnum'
+        index:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        closed:
+          type: string
+          format: date-time
+          nullable: true
+        project:
+          type: string
+          format: uuid
+        contract:
+          type: string
+          format: uuid
+        assignee:
+          type: string
+          format: uuid
+          nullable: true
+        attachments:
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+      - category
+      - comment_count
+      - contract
+      - created
+      - description
+      - id
+      - locked
+      - pending_unlock
+      - project
+      - researcher
+      - severity
+      - sla
+      - title
+      - updated
+    RiskHistory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/UserSummary'
+          readOnly: true
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Changes'
+          readOnly: true
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - changes
+      - id
+      - timestamp
+      - user
+    RiskStatusEnum:
+      enum:
+      - new
+      - in_progress
+      - closed
+      - rejected
+      type: string
+      description: |-
+        * `new` - New
+        * `in_progress` - In Progress
+        * `closed` - Closed
+        * `rejected` - Rejected
+    RiskTag:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        tag_details:
+          allOf:
+          - $ref: '#/components/schemas/Tag'
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        risk:
+          type: string
+          format: uuid
+        tag:
+          type: string
+          format: uuid
+      required:
+      - created
+      - id
+      - risk
+      - tag
+      - tag_details
+      - updated
+    SeverityEnum:
+      enum:
+      - informational
+      - low
+      - medium
+      - high
+      - critical
+      type: string
+      description: |-
+        * `informational` - Informational
+        * `low` - Low
+        * `medium` - Medium
+        * `high` - High
+        * `critical` - Critical
+    Skill:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/NameEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created
+      - id
+      - updated
+    SkillSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          readOnly: true
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/NameEnum'
+          - $ref: '#/components/schemas/NullEnum'
+      required:
+      - id
+      - name
+    Status045Enum:
+      enum:
+      - draft
+      - active
+      - completed
+      - closed
+      type: string
+      description: |-
+        * `draft` - Draft
+        * `active` - Active
+        * `completed` - Completed
+        * `closed` - Closed
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        company:
+          allOf:
+          - $ref: '#/components/schemas/Company'
+          readOnly: true
+        tag:
+          type: string
+          maxLength: 255
+        color:
+          type: string
+          maxLength: 255
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - company
+      - created
+      - id
+      - tag
+      - updated
+    TagDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        tag:
+          type: string
+          maxLength: 255
+        color:
+          type: string
+          maxLength: 255
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        company:
+          type: string
+          format: uuid
+      required:
+      - company
+      - created
+      - id
+      - tag
+      - updated
+    UnlockRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        risk:
+          type: string
+          format: uuid
+        approved:
+          type: boolean
+          default: false
+        risk_details:
+          allOf:
+          - $ref: '#/components/schemas/Risk'
+          readOnly: true
+      required:
+      - id
+      - risk
+      - risk_details
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          title: Name of User
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        user_type:
+          readOnly: true
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/UserTypeEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        email_sha256:
+          type: string
+          readOnly: true
+        is_active:
+          type: boolean
+          readOnly: true
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+      required:
+      - email
+      - email_sha256
+      - id
+      - is_active
+      - user_type
+    UserSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          title: Name of User
+          maxLength: 255
+        user_type:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/UserTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        email_sha256:
+          type: string
+          readOnly: true
+      required:
+      - email_sha256
+      - id
+    UserTypeEnum:
+      enum:
+      - client
+      - researcher
+      - partner
+      type: string
+      description: |-
+        * `client` - client
+        * `researcher` - researcher
+        * `partner` - partner
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    knoxTokenAuth:
+      type: http
+      in: header
+      name: Authorization
+      scheme: bearer
+      description: Token-based authentication with required prefix "Bearer"
+servers:
+- url: https://api.discloze.com
+  description: Text
+- url: http://api.discloze.com
+  description: Text
