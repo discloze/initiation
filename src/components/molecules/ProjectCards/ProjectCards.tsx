@@ -43,7 +43,10 @@ export function Feature({ project }: FeatureProps) {
             <Text size="sm" c="dimmed" lh={1.6}>
                 {project.description.slice(0, 300)}
             </Text>
-            <Text>{project.budget}</Text>
+            <Text>Proposals: {project.stats.proposals ?? 0}</Text>
+            <Text>Contracts: {project.stats.contracts ?? 0}</Text>
+            <Text>Unread Messages: {project.stats.unread_messages ?? 0}</Text>
+            <Text>Budjet: ${project.budget}</Text>
         </Flex>
     )
 }
