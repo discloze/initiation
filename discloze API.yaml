@@ -5824,7 +5824,7 @@ components:
       scheme: bearer
       description: Token-based authentication with required prefix "Bearer"
 servers:
-- url: https://api.discloze.com
+- url: https://api.staging.discloze.com
   description: Text
-- url: http://api.discloze.com
+- url: http://api.staging.discloze.com
   description: Text
